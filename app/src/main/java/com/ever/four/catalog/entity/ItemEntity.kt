@@ -1,4 +1,8 @@
 package com.ever.four.catalog.entity
 
-data class ItemEntity(val title: String, val description: String, val image: String) {
+import com.google.gson.annotations.SerializedName
+
+data class ItemEntity(@SerializedName("image") val image: String,
+                      @SerializedName("title") val title: String,
+                      @SerializedName("description") val detail: String) {
 }
