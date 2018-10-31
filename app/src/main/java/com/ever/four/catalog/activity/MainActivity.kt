@@ -25,33 +25,50 @@ private const val ENDPOINT = "http://private-f0eea-mobilegllatam.apiary-mock.com
 class MainActivity : AppCompatActivity() {
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
+    private var objectList: ArrayList<ItemEntity>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         layoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = layoutManager
+
+        //retrieve data saved if there is one
+        objectList = savedInstanceState?.getParcelableArrayList("myData")
         retrieveItems()
     }
 
     private fun retrieveItems() {
         showOverlay()
-        Executors.newSingleThreadExecutor().execute() {
-            var gson = Gson()
-            try {
-                val objectList = gson.fromJson(
-                    URL(ENDPOINT).readText(),
-                    Array<ItemEntity>::class.java
-                ).asList()
-                initializeAdapter(objectList)
-            } catch (e: UnknownHostException) {
-                displayNoDataAvailable(getString(R.string.no_connection))
-            } catch (e: FileNotFoundException) {
-                displayNoDataAvailable(getString(R.string.no_data))
-            } catch (e: Exception) {
-                displayNoDataAvailable(getString(R.string.unknown_error))
+        objectList?.let {
+            initializeAdapter(it)
+        } ?: run {
+            Executors.newSingleThreadExecutor().execute() {
+                var gson = Gson()
+                try {
+                    val list = gson.fromJson(
+                        URL(ENDPOINT).readText(),
+                        Array<ItemEntity>::class.java
+                    ).asList()
+                    objectList = ArrayList(list)
+                    initializeAdapter(objectList!!)
+
+                } catch (e: UnknownHostException) {
+                    displayNoDataAvailable(getString(R.string.no_connection))
+
+                } catch (e: FileNotFoundException) {
+                    displayNoDataAvailable(getString(R.string.no_data))
+
+                } catch (e: Exception) {
+                    displayNoDataAvailable(getString(R.string.unknown_error))
+                }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList("myData", objectList)
+        super.onSaveInstanceState(outState)
     }
 
     private fun initializeAdapter(objectList: List<ItemEntity>) {
@@ -74,10 +91,10 @@ class MainActivity : AppCompatActivity() {
         val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setTitle(getString(R.string.error))
         alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setPositiveButton(getString(R.string.retry)) {dialog, whichButton ->
+        alertDialogBuilder.setPositiveButton(getString(R.string.retry)) {_, _ ->
             retrieveItems()
         }
-        alertDialogBuilder.setNegativeButton(getString(R.string.cancel)) {dialog, whichButton ->
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel)) {_, _ ->
             android.os.Process.killProcess(android.os.Process.myPid())
         }
 
