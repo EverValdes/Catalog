@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Catalog</string>
+    <string name="no_description">&lt; Descripción no disponible &gt;</string>
+    <string name="error">Error</string>
+    <string name="cancel">Cerrar</string>
+    <string name="retry">Reintentar</string>
+    <string name="unknown_error">Algo salió mal, intenta de nuevo o vuelve luego</string>
+    <string name="no_data">No hay información disponible en este momento, intenta de nuevo o vuelve luego</string>
+    <string name="no_connection">No hay conexión disponible en este momento, intenta de nuevo o vuelve luego</string>
+</resources>

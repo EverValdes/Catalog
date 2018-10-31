@@ -1,6 +1,6 @@
 package com.ever.four.catalog.adapter
 
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,22 +8,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.ever.four.catalog.R
+import com.ever.four.catalog.activity.DescriptionActivity
 import com.ever.four.catalog.entity.ItemEntity
-import kotlinx.android.synthetic.main.activity_main.*
-import java.net.URL
-import java.net.UnknownHostException
+import com.ever.four.catalog.util.ImageRetriever
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-
-
-    var list: List<ItemEntity>
+    protected var list: List<ItemEntity>
 
     constructor(list: List<ItemEntity>) {
         this.list = list
     }
 
-    class ViewHolder: RecyclerView.ViewHolder {
-
+    inner class ViewHolder: RecyclerView.ViewHolder {
         var image: ImageView
         var title: TextView
         var detail: TextView
@@ -33,9 +29,13 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
             title = itemView.findViewById(R.id.title)
             detail = itemView.findViewById(R.id.detail)
 
-            itemView.setOnClickListener { v: View  ->
+            itemView.setOnClickListener { _: View  ->
                 var position: Int = getAdapterPosition()
-
+                var intentDetail = Intent(itemView.context, DescriptionActivity::class.java)
+                intentDetail.putExtra("title", list[position].title)
+                intentDetail.putExtra("description", list[position].description)
+                intentDetail.putExtra("image", list[position].image)
+                itemView.context.startActivity(intentDetail)
             }
         }
     }
@@ -47,18 +47,12 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
-        viewHolder.title.text = list.get(i).title
-        viewHolder.detail.text = list.get(i).detail
+        viewHolder.title.text = list[i].title
+        viewHolder.detail.text = list[i].description
 
-        val thread = Thread(Runnable {
-            try {
-                val image = BitmapFactory.decodeStream(URL(list.get(i).image).openConnection().getInputStream());
-                viewHolder.image.setImageBitmap(image)
-            } catch (e: Exception) {
-                viewHolder.image.setImageResource(R.drawable.no_image_available)
-            }
-        })
-        thread.start();
+        var imageRetriever = ImageRetriever(list[i].image, viewHolder.image)
+        imageRetriever.fitImage()
+
     }
 
     override fun getItemCount(): Int {

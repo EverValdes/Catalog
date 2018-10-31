@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--color generated via https://material-ui.com/style/color/-->
 <resources>
-    <color name="colorPrimary">#f4511e</color>
-    <color name="colorPrimaryDark">#aa3815</color>
-    <color name="colorPrimaryLight">#f6734b</color>
+    <color name="colorPrimary">#4caf50</color>
+    <color name="colorPrimaryDark">#357a38</color>
+    <color name="colorPrimaryLight">#6fbf73</color>
     <color name="colorBackgroundLoading">#999999</color>
 
     <color name="colorSecondary">#ffcf33</color>
