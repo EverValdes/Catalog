@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils
 
 import kotlinx.android.synthetic.main.activity_description.*
 
-//https://github.com/chrisbanes/cheesesquare
 class DescriptionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +17,9 @@ class DescriptionActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var extras = intent.extras
-
         setupTitle(extras.get("title") as String)
-
         setupDescription(extras.get("description") as String)
-
         setupMainImage(extras.get("image") as String)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

@@ -21,7 +21,7 @@ import java.lang.Exception
 import java.net.UnknownHostException
 import java.util.concurrent.Executors
 
-private const val ENDPOINT = "http://private-f0eea-mobilegllatam.apiary-mock.com/lista"
+private const val ENDPOINT = "http://private-f0eea-mobilegllatam.apiary-mock.com/list"
 class MainActivity : AppCompatActivity() {
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                 displayNoDataAvailable(getString(R.string.unknown_error))
             }
         }
-
     }
 
     private fun initializeAdapter(objectList: List<ItemEntity>) {
